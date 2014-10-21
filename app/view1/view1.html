@@ -1,1 +1,18 @@
-<p>This is the partial for view 1.</p>
+<script type="text/ng-template" id="categories_renderer.html">
+    {{category.displayName}}<button ng-click="showProducts(category.name)">show</button>
+    <ul>
+        <li ng-repeat="category in category.children" ng-include="'categories_renderer.html'">
+        </li>
+    </ul>
+</script>
+
+<p>Categories:</p>
+<ul>
+    <li ng-repeat="category in categories" ng-include="'categories_renderer.html'">
+
+    </li>
+</ul>
+
+<div ng-repeat="product in products">
+    {{product.displayName}}
+</div>
