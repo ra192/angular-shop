@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="categories_renderer.html">
-    {{category.displayName}}<button ng-click="showProducts(category.name)">show</button>
-    <ul>
+    <span ng-click="toggleCategory(category.name)">{{category.displayName}}</span>
+    <ul ng-show="category.selected">
         <li ng-repeat="category in category.children" ng-include="'categories_renderer.html'">
         </li>
     </ul>
