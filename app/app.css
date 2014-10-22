@@ -28,3 +28,11 @@
   content: "";
   padding: 0;
 }
+
+.expanded {
+    color: red;
+}
+
+.selected {
+    font-weight: bold;
+}

@@ -33,10 +33,19 @@ angular.module('myApp.home', ['ngRoute'])
 
         var category=findCategoryByName(categoryName,$scope.categories);
 
-        category.selected=!category.selected;
+        category.expanded=!category.expanded;
+    };
+
+    $scope.showProducts=function(categoryName) {
+
+        var category=findCategoryByName(categoryName,$scope.categories);
+
+        category.selected=true;
 
         $http.get('http://localhost:8081/products/'+categoryName+'.json').success(function(data){
             $scope.products=data.data;
         });
-    };
+     };
+
+
 }]);
