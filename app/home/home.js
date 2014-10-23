@@ -21,6 +21,17 @@ angular.module('myApp.home', ['ngRoute'])
         return null;
     }
 
+    var selectCategory=function(categoryName,categoriesArray) {
+        for(var i=0;i<categoriesArray.length;i++) {
+            if(categoriesArray[i].name==categoryName)
+                categoriesArray[i].selected=true;
+            else
+                categoriesArray[i].selected=false;
+
+            selectCategory(categoryName,categoriesArray[i].children);
+        }
+    }
+
     $http.get('http://localhost:8081/categories.json').success(function(data){
         $scope.categories=data.data;
     });
@@ -38,9 +49,7 @@ angular.module('myApp.home', ['ngRoute'])
 
     $scope.showProducts=function(categoryName) {
 
-        var category=findCategoryByName(categoryName,$scope.categories);
-
-        category.selected=true;
+        selectCategory(categoryName,$scope.categories);
 
         $http.get('http://localhost:8081/products/'+categoryName+'.json').success(function(data){
             $scope.products=data.data;
