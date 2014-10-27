@@ -36,3 +36,17 @@
 .selected {
     font-weight: bold;
 }
+
+.clear {
+    clear: left;
+}
+
+#categories {
+    float: left;
+    width: 15%;
+}
+
+#products {
+    float: left;
+
+}

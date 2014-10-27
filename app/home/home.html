@@ -15,13 +15,18 @@
 
 </script>
 
-<p>Categories:</p>
-<ul>
-    <li ng-repeat="category in categories" ng-include="'categories_renderer.html'">
+<div id="categories">
+    <ul>
+        <li ng-repeat="category in categories" ng-include="'categories_renderer.html'">
 
-    </li>
-</ul>
+        </li>
+    </ul>
+</div>
 
-<div ng-repeat="product in products">
-    {{product.displayName}}
+<div id="products">
+    <div ng-repeat="product in products">
+        {{product.displayName}}
+    </div>
+</div>
+<div class="clear">
 </div>

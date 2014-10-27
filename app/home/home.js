@@ -60,11 +60,12 @@ angular.module('myApp.home', ['ngRoute'])
     var categoryService=new CategoryService([]);
 
     categoryService.init=function(callback) {
-        if(categoryService.categoriesArray.length==0)
-            $http.get('http://localhost:8081/categories.json').success(function(data) {
-                categoryService.categoriesArray=data.data;
+        if(categoryService.categoriesArray.length==0) {
+            $http.get('http://localhost:8081/categories.json').success(function (data) {
+                categoryService.categoriesArray = data.data;
                 callback();
             });
+        }
         else
             callback();
     };
