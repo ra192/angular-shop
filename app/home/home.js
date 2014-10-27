@@ -2,97 +2,112 @@
 
 function CategoryService(categoriesArray) {
 
-    var findCategoryByName=function(categoryName,categoriesArray) {
-        for(var i=0;i<categoriesArray.length;i++) {
-            if(categoriesArray[i].name==categoryName) return categoriesArray[i];
-            var category=findCategoryByName(categoryName,categoriesArray[i].children);
-            if(category!=null) return category;
+    var findCategoryByName = function (categoryName, categoriesArray) {
+        for (var i = 0; i < categoriesArray.length; i++) {
+            if (categoriesArray[i].name == categoryName) return categoriesArray[i];
+            var category = findCategoryByName(categoryName, categoriesArray[i].children);
+            if (category != null) return category;
         }
 
         return null;
     };
 
-    var selectCategory=function(categoryName,categoriesArray) {
-        for(var i=0;i<categoriesArray.length;i++) {
-            if(categoriesArray[i].name==categoryName)
-                categoriesArray[i].selected=true;
+    var selectCategory = function (categoryName, categoriesArray) {
+        for (var i = 0; i < categoriesArray.length; i++) {
+            if (categoriesArray[i].name == categoryName)
+                categoriesArray[i].selected = true;
             else
-                categoriesArray[i].selected=false;
+                categoriesArray[i].selected = false;
 
-            selectCategory(categoryName,categoriesArray[i].children);
+            selectCategory(categoryName, categoriesArray[i].children);
         }
     };
 
-    this.categoriesArray=categoriesArray;
+    this.categoriesArray = categoriesArray;
 
-    this.findCategoryByName=function(categoryName) {
-      return findCategoryByName(categoryName,this.categoriesArray);
+    this.findCategoryByName = function (categoryName) {
+        return findCategoryByName(categoryName, this.categoriesArray);
     };
 
-    this.selectCategory=function(categoryName) {
-      selectCategory(categoryName,this.categoriesArray);
+    this.selectCategory = function (categoryName) {
+        selectCategory(categoryName, this.categoriesArray);
     };
 
-    this.toggleCategory=function(categoryName) {
+    this.toggleCategory = function (categoryName) {
 
-        var category=this.findCategoryByName(categoryName);
+        var category = this.findCategoryByName(categoryName);
 
-        category.expanded=!category.expanded;
+        category.expanded = !category.expanded;
     };
 }
 
-angular.module('myApp.home', ['ngRoute'])
+angular.module('myApp.home', ['ngRoute', 'facebook'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/home', {
-    templateUrl: 'home/home.html',
-    controller: 'HomeCtrl'
+    .config(['$routeProvider', 'FacebookProvider', function ($routeProvider, FacebookProvider) {
+        $routeProvider.when('/home', {
+            templateUrl: 'home/home.html',
+            controller: 'HomeCtrl'
 
-  })
-    .when('/products/:categoryName',{
-        templateUrl: 'home/home.html',
-        controller: 'HomeCtrl'
-    });
-}])
-
-.factory('categoryService',['$http',function($http) {
-
-    var categoryService=new CategoryService([]);
-
-    categoryService.init=function(callback) {
-        if(categoryService.categoriesArray.length==0) {
-            $http.get('http://localhost:8081/categories.json').success(function (data) {
-                categoryService.categoriesArray = data.data;
-                callback();
+        })
+            .when('/products/:categoryName', {
+                templateUrl: 'home/home.html',
+                controller: 'HomeCtrl'
             });
-        }
-        else
-            callback();
-    };
 
-    return categoryService;
-}])
+        FacebookProvider.init('131207310315568');
+    }])
 
-.controller('HomeCtrl', ['$scope','$http','$routeParams', '$location', 'categoryService', function($scope,$http,$routeParams, $location, categoryService) {
+    .factory('categoryService', ['$http', function ($http) {
 
-    var selectedCategoryName=$routeParams.categoryName;
-    if(typeof selectedCategoryName=='undefined')selectedCategoryName='lenovo_phones';
+        var categoryService = new CategoryService([]);
 
-    categoryService.init(function(){
-        categoryService.selectCategory(selectedCategoryName);
-        $scope.categories=categoryService.categoriesArray;
-    });
+        categoryService.init = function (callback) {
+            if (categoryService.categoriesArray.length == 0) {
+                $http.get('http://localhost:8081/categories.json').success(function (data) {
+                    categoryService.categoriesArray = data.data;
+                    callback();
+                });
+            }
+            else
+                callback();
+        };
 
-    $http.get('http://localhost:8081/products/'+selectedCategoryName+'.json').success(function(data){
-       $scope.products=data.data;
-    });
+        return categoryService;
+    }])
 
-    $scope.toggleCategory=function(categoryName) {
-        categoryService.toggleCategory(categoryName);
-    };
+    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'categoryService', 'Facebook',
+        function ($scope, $http, $routeParams, $location, categoryService, Facebook) {
 
-    $scope.showProducts=function(categoryName) {
+            var selectedCategoryName = $routeParams.categoryName;
+            if (typeof selectedCategoryName == 'undefined')selectedCategoryName = 'lenovo_phones';
 
-        $location.path('/products/'+categoryName);
-     };
-}]);
+            categoryService.init(function () {
+                categoryService.selectCategory(selectedCategoryName);
+                $scope.categories = categoryService.categoriesArray;
+            });
+
+            $http.get('http://localhost:8081/products/' + selectedCategoryName + '.json').success(function (data) {
+                $scope.products = data.data;
+            });
+
+            $scope.toggleCategory = function (categoryName) {
+                categoryService.toggleCategory(categoryName);
+            };
+
+            $scope.showProducts = function (categoryName) {
+
+                $location.path('/products/' + categoryName);
+            };
+
+            $scope.login = function () {
+                Facebook.login(function (fbResponse) {
+                    alert(fbResponse.authResponse.userID);
+                });
+            };
+
+            $scope.logout = function () {
+                Facebook.logout(function (fbResponse) {
+                    
+                });
+            };
+        }]);
