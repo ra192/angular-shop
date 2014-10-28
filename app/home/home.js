@@ -2,7 +2,7 @@
 
 
 
-angular.module('myApp.home', ['ngRoute', 'myApp.category', 'facebook'])
+angular.module('myApp.home', ['ngRoute', 'myApp.category', 'myApp.cart','facebook'])
 
     .config(['$routeProvider', 'FacebookProvider', function ($routeProvider, FacebookProvider) {
         $routeProvider.when('/home', {
@@ -20,8 +20,8 @@ angular.module('myApp.home', ['ngRoute', 'myApp.category', 'facebook'])
 
 
 
-    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'categoryService', 'Facebook',
-        function ($scope, $http, $routeParams, $location, categoryService, Facebook) {
+    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'categoryService', 'cart', 'Facebook',
+        function ($scope, $http, $routeParams, $location, categoryService, cart, Facebook) {
 
             var selectedCategoryName = $routeParams.categoryName;
             if (typeof selectedCategoryName == 'undefined')selectedCategoryName = 'lenovo_phones';
@@ -42,6 +42,11 @@ angular.module('myApp.home', ['ngRoute', 'myApp.category', 'facebook'])
             $scope.showProducts = function (categoryName) {
 
                 $location.path('/products/' + categoryName);
+            };
+
+            $scope.addToCart=function(product) {
+                cart.addProduct(product,1);
+                cart.save();
             };
 
             $scope.login = function () {

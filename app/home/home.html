@@ -27,6 +27,8 @@
 <div id="products">
     <div ng-repeat="product in products">
         {{product.displayName}}
+        {{product.price}}
+        <button ng-click="addToCart(product)">add</button>
     </div>
 </div>
 <div class="clear">

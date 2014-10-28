@@ -1,0 +1,7 @@
+<ul>
+    <li ng-repeat="cartItem in cartItems">
+        {{cartItem.product.displayName}}
+        <input type="number" ng-model="cartItem.quantity" ng-change="save()"/>
+    </li>
+    Total: {{totalPrice()}}
+</ul>
