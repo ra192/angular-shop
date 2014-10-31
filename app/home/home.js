@@ -18,8 +18,6 @@ angular.module('myApp.home', ['ngRoute', 'myApp.category', 'myApp.cart','faceboo
         FacebookProvider.init('131207310315568');
     }])
 
-
-
     .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'categoryService', 'cart', 'Facebook',
         function ($scope, $http, $routeParams, $location, categoryService, cart, Facebook) {
 
