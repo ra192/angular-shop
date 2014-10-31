@@ -14,8 +14,10 @@
     </span>
 
 </script>
-<button ng-click="login()">login</button>
-<button ng-click="logout()">logout</button>
+<div>
+    <button ng-click="login()">login</button>
+    <button ng-click="logout()">logout</button>
+</div>
 <div id="categories">
     <ul>
         <li ng-repeat="category in categories" ng-include="'categories_renderer.html'">
@@ -24,6 +26,8 @@
     </ul>
 </div>
 
+
+
 <div id="products">
     <div ng-repeat="product in products">
         {{product.displayName}}
@@ -31,5 +35,20 @@
         <button ng-click="addToCart(product)">add</button>
     </div>
 </div>
+
+<div id="filters">
+    <ul>
+        <li ng-repeat="property in productsProperties">
+            {{property.displayName}}
+            <ul>
+                <li ng-repeat="propertyValue in property.propertyValues">
+                    {{propertyValue.displayName}}
+                    {{propertyValue.count}}
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
 <div class="clear">
 </div>
