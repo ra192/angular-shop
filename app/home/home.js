@@ -33,7 +33,7 @@ angular.module('myApp.home', ['ngRoute', 'myApp.category', 'myApp.cart','faceboo
                 $scope.products = data.data;
             });
 
-            $http.get('http://localhost:8081/productsProperties/' + selectedCategoryName + '.json').success(function (data) {
+            $http.post('http://localhost:8081/productsProperties/' + selectedCategoryName + '.json',{}).success(function (data) {
                 $scope.productsProperties = data.data;
             });
 
