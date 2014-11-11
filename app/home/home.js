@@ -2,7 +2,7 @@
 
 
 
-angular.module('myApp.home', ['ngRoute', 'myApp.category', 'myApp.cart','facebook'])
+angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'myApp.cart','facebook'])
 
     .config(['$routeProvider', 'FacebookProvider', function ($routeProvider, FacebookProvider) {
         $routeProvider.when('/home', {
@@ -18,8 +18,8 @@ angular.module('myApp.home', ['ngRoute', 'myApp.category', 'myApp.cart','faceboo
         FacebookProvider.init('131207310315568');
     }])
 
-    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'categoryService', 'cart', 'Facebook',
-        function ($scope, $http, $routeParams, $location, categoryService, cart, Facebook) {
+    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'apiUrl','categoryService', 'cart', 'Facebook',
+        function ($scope, $http, $routeParams, $location, apiUrl, categoryService, cart, Facebook) {
 
             var selectedCategoryName = $routeParams.categoryName;
             if (typeof selectedCategoryName == 'undefined')selectedCategoryName = 'lenovo_phones';
@@ -29,11 +29,18 @@ angular.module('myApp.home', ['ngRoute', 'myApp.category', 'myApp.cart','faceboo
                 $scope.categories = categoryService.categoriesArray;
             });
 
-            $http.get('http://localhost:8081/products/' + selectedCategoryName + '.json').success(function (data) {
+            $http.get(apiUrl+'/products/' + selectedCategoryName + '.json').success(function (data) {
                 $scope.products = data.data;
             });
 
-            $http.post('http://localhost:8081/productsProperties/' + selectedCategoryName + '.json',{}).success(function (data) {
+            $http.post(apiUrl+'/productsProperties/' + selectedCategoryName + '.json',{}).success(function (data) {
+
+                var properties=data.data;
+
+                for(var i=0;i<properties.length;i++) {
+
+                }
+
                 $scope.productsProperties = data.data;
             });
 

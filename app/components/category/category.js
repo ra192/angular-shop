@@ -41,15 +41,15 @@ function CategoryService(categoriesArray) {
     };
 }
 
-angular.module('myApp.category', [])
+angular.module('myApp.category', ['myApp.settings'])
 
-    .factory('categoryService', ['$http', function ($http) {
+    .factory('categoryService', ['$http', 'apiUrl', function ($http,apiUrl) {
 
         var categoryService = new CategoryService([]);
 
         categoryService.init = function (callback) {
             if (categoryService.categoriesArray.length == 0) {
-                $http.get('http://localhost:8081/categories.json').success(function (data) {
+                $http.get(apiUrl+'/categories.json').success(function (data) {
                     categoryService.categoriesArray = data.data;
                     callback();
                 });

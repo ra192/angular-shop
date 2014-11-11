@@ -43,7 +43,7 @@
             <ul>
                 <li ng-repeat="propertyValue in property.propertyValues">
                     {{propertyValue.displayName}}
-                    {{propertyValue.count}}
+                    <span ng-if="property.isAdditional">+</span>{{propertyValue.count}}
                 </li>
             </ul>
         </li>

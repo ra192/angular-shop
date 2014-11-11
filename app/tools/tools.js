@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.tools', ['ngRoute','angularFileUpload'])
+angular.module('myApp.tools', ['ngRoute', 'myApp.settings', 'angularFileUpload'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/tools', {
@@ -9,7 +9,7 @@ angular.module('myApp.tools', ['ngRoute','angularFileUpload'])
   });
 }])
 
-.controller('ToolsCtrl', ['$scope','FileUploader',function($scope,FileUploader) {
+.controller('ToolsCtrl', ['$scope', 'apiUrl', 'FileUploader',function($scope, apiUrl, FileUploader) {
     $scope.uploader = new FileUploader({
         url:'http://localhost:8081/tools/import.json'
     });
