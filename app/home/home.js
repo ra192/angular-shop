@@ -29,18 +29,19 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 $scope.categories = categoryService.categoriesArray;
             });
 
-            $http.get(apiUrl+'/products/' + selectedCategoryName + '.json').success(function (data) {
+            var filter =  $location.search().filter;
+
+            var propertyValues=[];
+            if(typeof filter != 'undefined') {
+                propertyValues=filter.split("-");
+            }
+
+            $http.post(apiUrl+'/products/' + selectedCategoryName + '.json',{"propertyValues":propertyValues}).success(function (data) {
                 $scope.products = data.data;
             });
 
-            $http.post(apiUrl+'/productsProperties/' + selectedCategoryName + '.json',{}).success(function (data) {
-
-                var properties=data.data;
-
-                for(var i=0;i<properties.length;i++) {
-
-                }
-
+            $http.post(apiUrl+'/productsProperties/' + selectedCategoryName + '.json',{"propertyValues":propertyValues}).success(function (data) {
+                $scope.selectedProperties=data.selectedProperties;
                 $scope.productsProperties = data.data;
             });
 
@@ -49,8 +50,19 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             };
 
             $scope.showProducts = function (categoryName) {
-
                 $location.path('/products/' + categoryName);
+            };
+
+            $scope.addFilter=function(propertyValueName) {
+                var newFilter;
+
+                if(typeof filter != 'undefined') {
+                    newFilter=filter+"-"+propertyValueName;
+                } else {
+                    newFilter=propertyValueName;
+                }
+
+                $location.path('/products/'+selectedCategoryName).search("filter",newFilter);
             };
 
             $scope.addToCart=function(product) {

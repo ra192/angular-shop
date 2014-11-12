@@ -37,11 +37,15 @@
 </div>
 
 <div id="filters">
+    <ul ng-repeat="property in selectedProperties">
+        <li ng-repeat="propertyValue in property.propertyValues">{{propertyValue.displayName}}</li>
+    </ul>
+
     <ul>
         <li ng-repeat="property in productsProperties">
             {{property.displayName}}
             <ul>
-                <li ng-repeat="propertyValue in property.propertyValues">
+                <li ng-repeat="propertyValue in property.propertyValues" ng-click="addFilter(propertyValue.name)">
                     {{propertyValue.displayName}}
                     <span ng-if="property.isAdditional">+</span>{{propertyValue.count}}
                 </li>
