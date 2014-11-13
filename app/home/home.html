@@ -38,7 +38,7 @@
 
 <div id="filters">
     <ul ng-repeat="property in selectedProperties">
-        <li ng-repeat="propertyValue in property.propertyValues">{{propertyValue.displayName}}</li>
+        <li ng-repeat="propertyValue in property.propertyValues" ng-click="delFilter(propertyValue.name)">{{propertyValue.displayName}}</li>
     </ul>
 
     <ul>

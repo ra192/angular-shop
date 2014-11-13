@@ -50,7 +50,7 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             };
 
             $scope.showProducts = function (categoryName) {
-                $location.path('/products/' + categoryName);
+                $location.path('/products/' + categoryName).search("filter", null);
             };
 
             $scope.addFilter=function(propertyValueName) {
@@ -63,6 +63,21 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 }
 
                 $location.path('/products/'+selectedCategoryName).search("filter",newFilter);
+            };
+
+            $scope.delFilter=function(propertyValueName) {
+              var newFilter;
+
+              if(filter.lastIndexOf(propertyValueName,0)==0) {
+                  newFilter=filter.replace(propertyValueName,"").replace("-","");
+              } else {
+                  newFilter=filter.replace("-"+propertyValueName,"");
+              }
+              if(newFilter.length==0) {
+                  $location.path('/products/' + selectedCategoryName).search("filter", null);
+              } else {
+                  $location.path('/products/' + selectedCategoryName).search("filter", newFilter);
+              }
             };
 
             $scope.addToCart=function(product) {
