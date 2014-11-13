@@ -41,7 +41,9 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             });
 
             $http.post(apiUrl+'/productsProperties/' + selectedCategoryName + '.json',{"propertyValues":propertyValues}).success(function (data) {
-                $scope.selectedProperties=data.selectedProperties;
+                $scope.selectedProperties=data.selectedProperties.reduce(function(a,b) {
+                    return a.concat(b.propertyValues);
+                },[]);
                 $scope.productsProperties = data.data;
             });
 
