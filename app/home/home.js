@@ -73,9 +73,11 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
 
             var order=$location.search().order;
             if(typeof order =='undefined') order="displayName";
+            $scope.selectedOrder=order;
 
             var isAsc=$location.search().asc;
-            if(typeof order =='undefined') isAsc=true;
+            if(typeof isAsc =='undefined') isAsc=true;
+            $scope.isAsc=isAsc;
 
             $http.post(apiUrl + '/products/' + selectedCategoryName + '.json', {
                 "propertyValues": propertyValues,

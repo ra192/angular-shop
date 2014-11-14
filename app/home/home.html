@@ -29,9 +29,11 @@
 
 
 <div id="products">
-    Sort by: <span ng-click="order('displayName',true)">display name asc</span>
-    <span ng-click="order('displayName',false)">display name desc</span><span ng-click="order('price',true)">price asc</span>
-    <span ng-click="order('price',false)">price desc</span>
+    Sort by:
+    <span ng-click="order('displayName',true)" ng-class="{selected: selectedOrder=='displayName'&& isAsc}">display name asc</span>
+    <span ng-click="order('displayName',false)" ng-class="{selected: selectedOrder=='displayName'&& !isAsc}">display name desc</span>
+    <span ng-click="order('price',true)"ng-class="{selected: selectedOrder=='price'&& isAsc}">price asc</span>
+    <span ng-click="order('price',false)" ng-class="{selected: selectedOrder=='price'&& !isAsc}">price desc</span>
     <div ng-repeat="product in products">
         {{product.displayName}}
         {{product.price}}
