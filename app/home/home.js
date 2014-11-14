@@ -71,10 +71,18 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             if (typeof currentPage == 'undefined')currentPage = 1;
             $scope.currentPage=currentPage;
 
+            var order=$location.search().order;
+            if(typeof order =='undefined') order="displayName";
+
+            var isAsc=$location.search().asc;
+            if(typeof order =='undefined') isAsc=true;
+
             $http.post(apiUrl + '/products/' + selectedCategoryName + '.json', {
                 "propertyValues": propertyValues,
                 "first": (currentPage - 1) *productsPerPage,
-                "max":productsPerPage
+                "max":productsPerPage,
+                "orderProperty":order,
+                "isAsc":isAsc
             }).success(function (data) {
                 $scope.products = data.data;
                 $scope.pages=getPages(currentPage,getLastPage(data.count,productsPerPage),1);
@@ -92,7 +100,7 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             };
 
             $scope.showProducts = function (categoryName) {
-                $location.path('/products/' + categoryName).search({"filter": null,"page":null});
+                $location.path('/products/' + categoryName).search("filter", null).search("page",null);
             };
 
             $scope.addFilter = function (propertyValueName) {
@@ -104,7 +112,7 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                     newFilter = propertyValueName;
                 }
 
-                $location.path('/products/' + selectedCategoryName).search({"filter": newFilter,"page":null});
+                $location.path('/products/' + selectedCategoryName).search("filter", newFilter).search("page", null);
             };
 
             $scope.delFilter = function (propertyValueName) {
@@ -116,14 +124,18 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                     newFilter = filter.replace("-" + propertyValueName, "");
                 }
                 if (newFilter.length == 0) {
-                    $location.path('/products/' + selectedCategoryName).search({"filter": null, "page":null});
+                    $location.path('/products/' + selectedCategoryName).search("filter", null).search("page",null);
                 } else {
-                    $location.path('/products/' + selectedCategoryName).search({"filter": newFilter, "page":null});
+                    $location.path('/products/' + selectedCategoryName).search("filter", newFilter).search("page", null);
                 }
             };
 
             $scope.showPage = function (page) {
                 $location.path('/products/' + selectedCategoryName).search("page", page);
+            };
+
+            $scope.order = function (order,isAsc) {
+                $location.path('/products/' + selectedCategoryName).search("order", order).search("asc", isAsc).search("page",null);
             };
 
             $scope.addToCart = function (product) {
