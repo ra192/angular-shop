@@ -55,4 +55,6 @@
 </div>
 
 <div class="clear">
+
+<span ng-repeat="page in pages" ng-click="showPage(page)" ng-class="{selected:page==currentPage}">{{page}}</span>
 </div>
