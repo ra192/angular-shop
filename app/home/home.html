@@ -15,8 +15,8 @@
 
 </script>
 <div>
-    <button ng-click="login()">login</button>
-    <button ng-click="logout()">logout</button>
+    <button ng-click="login()" ng-if="!isLoggedIn">login</button>
+    <button ng-click="logout()" ng-if="isLoggedIn">logout</button>
 </div>
 <div id="categories">
     <ul>

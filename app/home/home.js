@@ -1,31 +1,31 @@
 'use strict';
 
-function getLastPage(count,perPage) {
-    var mod = count%perPage;
-    if(mod==0) {
-        return count/perPage;
+function getLastPage(count, perPage) {
+    var mod = count % perPage;
+    if (mod == 0) {
+        return count / perPage;
     } else {
-        return (count - mod)/perPage +1;
+        return (count - mod) / perPage + 1;
     }
 }
 
-function getPages(currentPage,lastPage,padding) {
-    var start=currentPage-padding;
-    var end=currentPage+padding;
+function getPages(currentPage, lastPage, padding) {
+    var start = currentPage - padding;
+    var end = currentPage + padding;
 
-    if(start<1) {
-        end=end-start+1;
-        start=1;
+    if (start < 1) {
+        end = end - start + 1;
+        start = 1;
     }
 
-    if(end>lastPage) {
-        start=start-(end-lastPage);
-        if(start<1)start=1;
-        end=lastPage;
+    if (end > lastPage) {
+        start = start - (end - lastPage);
+        if (start < 1)start = 1;
+        end = lastPage;
     }
 
-    var result=[];
-    for(var i=start;i<=end;i++) {
+    var result = [];
+    for (var i = start; i <= end; i++) {
         result.push(i);
     }
 
@@ -69,25 +69,25 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
 
             var currentPage = $location.search().page;
             if (typeof currentPage == 'undefined')currentPage = 1;
-            $scope.currentPage=currentPage;
+            $scope.currentPage = currentPage;
 
-            var order=$location.search().order;
-            if(typeof order =='undefined') order="displayName";
-            $scope.selectedOrder=order;
+            var order = $location.search().order;
+            if (typeof order == 'undefined') order = "displayName";
+            $scope.selectedOrder = order;
 
-            var isAsc=$location.search().asc;
-            if(typeof isAsc =='undefined') isAsc=true;
-            $scope.isAsc=isAsc;
+            var isAsc = $location.search().asc;
+            if (typeof isAsc == 'undefined') isAsc = true;
+            $scope.isAsc = isAsc;
 
             $http.post(apiUrl + '/products/' + selectedCategoryName + '.json', {
                 "propertyValues": propertyValues,
-                "first": (currentPage - 1) *productsPerPage,
-                "max":productsPerPage,
-                "orderProperty":order,
-                "isAsc":isAsc
+                "first": (currentPage - 1) * productsPerPage,
+                "max": productsPerPage,
+                "orderProperty": order,
+                "isAsc": isAsc
             }).success(function (data) {
                 $scope.products = data.data;
-                $scope.pages=getPages(currentPage,getLastPage(data.count,productsPerPage),1);
+                $scope.pages = getPages(currentPage, getLastPage(data.count, productsPerPage), 1);
             });
 
             $http.post(apiUrl + '/productsProperties/' + selectedCategoryName + '.json', {"propertyValues": propertyValues}).success(function (data) {
@@ -102,7 +102,7 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             };
 
             $scope.showProducts = function (categoryName) {
-                $location.path('/products/' + categoryName).search("filter", null).search("page",null);
+                $location.path('/products/' + categoryName).search("filter", null).search("page", null);
             };
 
             $scope.addFilter = function (propertyValueName) {
@@ -126,7 +126,7 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                     newFilter = filter.replace("-" + propertyValueName, "");
                 }
                 if (newFilter.length == 0) {
-                    $location.path('/products/' + selectedCategoryName).search("filter", null).search("page",null);
+                    $location.path('/products/' + selectedCategoryName).search("filter", null).search("page", null);
                 } else {
                     $location.path('/products/' + selectedCategoryName).search("filter", newFilter).search("page", null);
                 }
@@ -136,8 +136,8 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 $location.path('/products/' + selectedCategoryName).search("page", page);
             };
 
-            $scope.order = function (order,isAsc) {
-                $location.path('/products/' + selectedCategoryName).search("order", order).search("asc", isAsc).search("page",null);
+            $scope.order = function (order, isAsc) {
+                $location.path('/products/' + selectedCategoryName).search("order", order).search("asc", isAsc).search("page", null);
             };
 
             $scope.addToCart = function (product) {
@@ -145,15 +145,28 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 cart.save();
             };
 
+            $scope.isLoggedIn = false;
+            Facebook.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    $scope.isLoggedIn = true;
+                }
+            });
+
             $scope.login = function () {
                 Facebook.login(function (fbResponse) {
-                    alert(fbResponse.authResponse.userID);
+                    $scope.isLoggedIn = true;
+
+                    $http.post(apiUrl + '/users/add.json', {
+                        "userID": fbResponse.authResponse.userID,
+                        "accessToken": fbResponse.authResponse.accessToken,
+                        "expiresIn": fbResponse.authResponse.expiresIn
+                    });
                 });
             };
 
             $scope.logout = function () {
                 Facebook.logout(function (fbResponse) {
-
+                    $scope.isLoggedIn = false;
                 });
             };
         }]);
