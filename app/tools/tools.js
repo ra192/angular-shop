@@ -15,14 +15,6 @@ angular.module('myApp.tools', ['ngRoute', 'myApp.settings', 'angularFileUpload',
 
         Facebook.getLoginStatus(function (fbResponse) {
             if (fbResponse.status === 'connected') {
-                $scope.isLoggedIn = true;
-
-                $http.post(apiUrl + '/users/add.json', {
-                    "userID": fbResponse.authResponse.userID,
-                    "accessToken": fbResponse.authResponse.accessToken,
-                    "expiresIn": fbResponse.authResponse.expiresIn
-                });
-
                 $scope.uploader.headers.accessToken=fbResponse.authResponse.accessToken;
             }
         });
