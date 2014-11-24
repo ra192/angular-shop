@@ -146,14 +146,8 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             };
 
             $scope.isLoggedIn = false;
-            Facebook.getLoginStatus(function (response) {
-                if (response.status === 'connected') {
-                    $scope.isLoggedIn = true;
-                }
-            });
-
-            $scope.login = function () {
-                Facebook.login(function (fbResponse) {
+            Facebook.getLoginStatus(function (fbResponse) {
+                if (fbResponse.status === 'connected') {
                     $scope.isLoggedIn = true;
 
                     $http.post(apiUrl + '/users/add.json', {
@@ -161,6 +155,20 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                         "accessToken": fbResponse.authResponse.accessToken,
                         "expiresIn": fbResponse.authResponse.expiresIn
                     });
+                }
+            });
+
+            $scope.login = function () {
+                Facebook.login(function (fbResponse) {
+                    if (fbResponse.status === 'connected') {
+                        $scope.isLoggedIn = true;
+
+                        $http.post(apiUrl + '/users/add.json', {
+                            "userID": fbResponse.authResponse.userID,
+                            "accessToken": fbResponse.authResponse.accessToken,
+                            "expiresIn": fbResponse.authResponse.expiresIn
+                        });
+                    }
                 });
             };
 
