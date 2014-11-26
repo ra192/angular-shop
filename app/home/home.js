@@ -48,9 +48,8 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
         FacebookProvider.init('131207310315568');
     }])
 
-    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'apiUrl', 'productsPerPage',
-        'categoryService', 'cart', 'Facebook',
-        function ($scope, $http, $routeParams, $location, apiUrl, productsPerPage, categoryService, cart, Facebook) {
+    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'settings', 'categoryService', 'cart', 'Facebook',
+        function ($scope, $http, $routeParams, $location, settings, categoryService, cart, Facebook) {
 
             var selectedCategoryName = $routeParams.categoryName;
             if (typeof selectedCategoryName == 'undefined')selectedCategoryName = 'lenovo_phones';
@@ -79,18 +78,18 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             if (typeof isAsc == 'undefined') isAsc = true;
             $scope.isAsc = isAsc;
 
-            $http.post(apiUrl + '/products/' + selectedCategoryName + '.json', {
+            $http.post(settings.apiUrl + '/products/' + selectedCategoryName + '.json', {
                 "propertyValues": propertyValues,
-                "first": (currentPage - 1) * productsPerPage,
-                "max": productsPerPage,
+                "first": (currentPage - 1) * settings.productsPerPage,
+                "max": settings.productsPerPage,
                 "orderProperty": order,
                 "isAsc": isAsc
             }).success(function (data) {
                 $scope.products = data.data;
-                $scope.pages = getPages(currentPage, getLastPage(data.count, productsPerPage), 1);
+                $scope.pages = getPages(currentPage, getLastPage(data.count, settings.productsPerPage), 1);
             });
 
-            $http.post(apiUrl + '/productsProperties/' + selectedCategoryName + '.json', {"propertyValues": propertyValues}).success(function (data) {
+            $http.post(settings.apiUrl + '/productsProperties/' + selectedCategoryName + '.json', {"propertyValues": propertyValues}).success(function (data) {
                 $scope.selectedProperties = data.selectedProperties.reduce(function (a, b) {
                     return a.concat(b.propertyValues);
                 }, []);
@@ -153,8 +152,8 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 }
             });
 
-            $scope.$on('Facebook:authResponseChange', function(ev,fbResponse) {
-                $http.post(apiUrl + '/users/add.json', {
+            $scope.$on('Facebook:authResponseChange', function (ev, fbResponse) {
+                $http.post(settings.apiUrl + '/users/add.json', {
                     "userID": fbResponse.authResponse.userID,
                     "accessToken": fbResponse.authResponse.accessToken,
                     "expiresIn": fbResponse.authResponse.expiresIn

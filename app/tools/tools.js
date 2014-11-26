@@ -11,7 +11,7 @@ angular.module('myApp.tools', ['ngRoute', 'myApp.settings', 'angularFileUpload',
         FacebookProvider.init('131207310315568');
     }])
 
-    .controller('ToolsCtrl', ['$scope', '$http', 'apiUrl', 'FileUploader', 'Facebook', function ($scope, $http, apiUrl, FileUploader, Facebook) {
+    .controller('ToolsCtrl', ['$scope', '$http', 'settings', 'FileUploader', 'Facebook', function ($scope, $http, settings, FileUploader, Facebook) {
 
         Facebook.getLoginStatus(function (fbResponse) {
             if (fbResponse.status === 'connected') {
@@ -20,7 +20,7 @@ angular.module('myApp.tools', ['ngRoute', 'myApp.settings', 'angularFileUpload',
         });
 
         $scope.uploader = new FileUploader({
-            url: apiUrl + '/tools/import.json'
+            url: settings.apiUrl + '/tools/import.json'
         });
 
         $scope.upload = function () {

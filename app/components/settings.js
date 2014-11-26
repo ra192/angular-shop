@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('myApp.settings',[]).
-constant("apiUrl","http://localhost:8081").
-constant("productsPerPage","5")
-;
+angular.module('myApp.settings', []).
+    constant("settings", {
+        apiUrl: "http://localhost:8081",
+        productsPerPage: 5
+    });
