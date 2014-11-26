@@ -34,7 +34,7 @@ function getPages(currentPage, lastPage, padding) {
 
 angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'myApp.cart', 'facebook'])
 
-    .config(['$routeProvider', 'FacebookProvider', function ($routeProvider, FacebookProvider) {
+    .config(['$routeProvider', 'FacebookProvider', 'settings', function ($routeProvider, FacebookProvider, settings) {
         $routeProvider.when('/home', {
             templateUrl: 'home/home.html',
             controller: 'HomeCtrl'
@@ -45,7 +45,7 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 controller: 'HomeCtrl'
             });
 
-        FacebookProvider.init('131207310315568');
+        FacebookProvider.init(settings.facebookAppId);
     }])
 
     .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'settings', 'categoryService', 'cart', 'Facebook',

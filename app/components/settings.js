@@ -3,5 +3,6 @@
 angular.module('myApp.settings', []).
     constant("settings", {
         apiUrl: "http://localhost:8081",
-        productsPerPage: 5
+        productsPerPage: 5,
+        facebookAppId: '131207310315568'
     });

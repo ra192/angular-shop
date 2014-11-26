@@ -2,13 +2,13 @@
 
 angular.module('myApp.tools', ['ngRoute', 'myApp.settings', 'angularFileUpload', 'facebook'])
 
-    .config(['$routeProvider', 'FacebookProvider', function ($routeProvider, FacebookProvider) {
+    .config(['$routeProvider', 'FacebookProvider', 'settings', function ($routeProvider, FacebookProvider, settings) {
         $routeProvider.when('/tools', {
             templateUrl: 'tools/tools.html',
             controller: 'ToolsCtrl'
         });
 
-        FacebookProvider.init('131207310315568');
+        FacebookProvider.init(settings.facebookAppId);
     }])
 
     .controller('ToolsCtrl', ['$scope', '$http', 'settings', 'FileUploader', 'Facebook', function ($scope, $http, settings, FileUploader, Facebook) {
