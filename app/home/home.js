@@ -32,9 +32,9 @@ function getPages(currentPage, lastPage, padding) {
     return result;
 }
 
-angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'myApp.cart', 'facebook'])
+angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'myApp.cart', 'myApp.user'])
 
-    .config(['$routeProvider', 'FacebookProvider', 'settings', function ($routeProvider, FacebookProvider, settings) {
+    .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/home', {
             templateUrl: 'home/home.html',
             controller: 'HomeCtrl'
@@ -44,12 +44,10 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 templateUrl: 'home/home.html',
                 controller: 'HomeCtrl'
             });
-
-        FacebookProvider.init(settings.facebookAppId);
     }])
 
-    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'settings', 'categoryService', 'cart', 'Facebook',
-        function ($scope, $http, $routeParams, $location, settings, categoryService, cart, Facebook) {
+    .controller('HomeCtrl', ['$scope', '$http', '$routeParams', '$location', 'settings', 'categoryService', 'cart', 'User',
+        function ($scope, $http, $routeParams, $location, settings, categoryService, cart, User) {
 
             var selectedCategoryName = $routeParams.categoryName;
             if (typeof selectedCategoryName == 'undefined')selectedCategoryName = 'lenovo_phones';
@@ -144,33 +142,27 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 cart.save();
             };
 
-            Facebook.getLoginStatus(function (fbResponse) {
-                if (fbResponse.status === 'connected') {
-                    $scope.isLoggedIn = true;
+            User.getLoginStatus(function(user){
+                if(user.isLoggedIn) {
+                    $scope.isLoggedIn=true;
                 } else {
-                    $scope.isLoggedIn = false;
+                    $scope.isLoggedIn=false;
                 }
             });
 
-            $scope.$on('Facebook:authResponseChange', function (ev, fbResponse) {
-                $http.post(settings.apiUrl + '/users/add.json', {
-                    "userID": fbResponse.authResponse.userID,
-                    "accessToken": fbResponse.authResponse.accessToken,
-                    "expiresIn": fbResponse.authResponse.expiresIn
-                });
-            });
-
-            $scope.login = function () {
-                Facebook.login(function (fbResponse) {
-                    if (fbResponse.status === 'connected') {
-                        $scope.isLoggedIn = true;
+            $scope.login = function() {
+                User.login(function(user){
+                    if(user.isLoggedIn) {
+                        $scope.isLoggedIn=true;
                     }
                 });
             };
 
-            $scope.logout = function () {
-                Facebook.logout(function (fbResponse) {
-                    $scope.isLoggedIn = false;
+            $scope.logout = function() {
+                User.logout(function(user) {
+                   if(!user.isLoggedIn) {
+                       $scope.isLoggedIn=false;
+                   }
                 });
             };
         }]);

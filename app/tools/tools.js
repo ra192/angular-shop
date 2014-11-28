@@ -1,21 +1,19 @@
 'use strict';
 
-angular.module('myApp.tools', ['ngRoute', 'myApp.settings', 'angularFileUpload', 'facebook'])
+angular.module('myApp.tools', ['ngRoute', 'angularFileUpload', 'myApp.settings', 'myApp.user'])
 
-    .config(['$routeProvider', 'FacebookProvider', 'settings', function ($routeProvider, FacebookProvider, settings) {
+    .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/tools', {
             templateUrl: 'tools/tools.html',
             controller: 'ToolsCtrl'
         });
-
-        FacebookProvider.init(settings.facebookAppId);
     }])
 
-    .controller('ToolsCtrl', ['$scope', '$http', 'settings', 'FileUploader', 'Facebook', function ($scope, $http, settings, FileUploader, Facebook) {
+    .controller('ToolsCtrl', ['$scope', '$http', 'settings', 'FileUploader', 'User', function ($scope, $http, settings, FileUploader, User) {
 
-        Facebook.getLoginStatus(function (fbResponse) {
-            if (fbResponse.status === 'connected') {
-                $scope.uploader.headers.accessToken=fbResponse.authResponse.accessToken;
+        User.getLoginStatus(function(user){
+            if(user.isLoggedIn) {
+                $scope.uploader.headers.accessToken=user.accessToken;
             }
         });
 
