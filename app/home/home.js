@@ -137,6 +137,10 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
                 $location.path('/products/' + selectedCategoryName).search("order", order).search("asc", isAsc).search("page", null);
             };
 
+            $scope.search=function() {
+                $location.path('/search').search("q", $scope.searchQuery);
+            };
+
             $scope.addToCart = function (product) {
                 cart.addProduct(product, 1);
                 cart.save();
