@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.tools', ['ngRoute', 'angularFileUpload', 'myApp.settings', 'myApp.user'])
+angular.module('myAdminApp.tools', ['ngRoute', 'angularFileUpload', 'myApp.settings', 'myApp.user'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/tools', {
