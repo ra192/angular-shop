@@ -1,5 +1,29 @@
-<ul>
-    <li ng-repeat="category in categories">
+<script type="text/ng-template" id="categories_renderer.html">
+    <span ng-click="toggleCategory(category.name)" ng-class="{expanded:category.expanded}"
+          ng-if="category.children.length>0">
+        {{category.displayName}} <button ng-click="createCategory(category.name)">cr. sub</button>
+    </span>
+    <ul ng-if="category.children.length>0" ng-show="category.expanded">
+        <li ng-repeat="category in category.children" ng-include="'categories_renderer.html'">
+        </li>
+    </ul>
+
+    <span ng-click="showProducts(category.name)" ng-class="{selected:category.selected}"
+          ng-if="category.children.length==0">
         {{category.displayName}}
+    </span>
+
+</script>
+
+<ul>
+    <li ng-repeat="category in categories" ng-include="'categories_renderer.html'">
+
     </li>
 </ul>
+
+<div id="products">
+    <div ng-repeat="product in products">
+        {{product.displayName}}
+        {{product.price}}
+    </div>
+</div>

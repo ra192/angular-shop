@@ -1,0 +1,7 @@
+{{message}}
+<form>
+    <input type="text" required="true" ng-model="category.name"/>
+    <input type="text" required="true" ng-model="category.displayName"/>
+    <select ng-model="category.properties" ng-options="property.name as property.displayName for property in properties" multiple></select>
+    <button ng-click="save(category)">save</button>
+</form>
