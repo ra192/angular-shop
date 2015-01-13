@@ -5,6 +5,7 @@ angular.module('myAdminApp', [
     'ngRoute',
     'myAdminApp.products',
     'myAdminApp.category',
+    'myAdminApp.property',
     'myAdminApp.tools'
 ]).
     config(['$routeProvider', function($routeProvider) {

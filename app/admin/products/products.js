@@ -27,6 +27,9 @@ angular.module('myAdminApp.products', ['ngRoute', 'myApp.category', 'myApp.setti
                     $scope.createCategory=function(parent) {
                         $location.path('/category/create').search("parent", parent);
                     };
+                    $scope.updateCategory=function(name) {
+                        $location.path('/category/update').search("name", name);
+                    };
                 })
             }
         });

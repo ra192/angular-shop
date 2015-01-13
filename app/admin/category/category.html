@@ -1,7 +1,7 @@
 {{message}}
-<form>
-    <input type="text" required="true" ng-model="category.name"/>
+<form novalidate>
+    <input type="text" required="true" ng-model="category.name" ng-show="isCreate"/>
     <input type="text" required="true" ng-model="category.displayName"/>
-    <select ng-model="category.properties" ng-options="property.name as property.displayName for property in properties" multiple></select>
-    <button ng-click="save(category)">save</button>
+    <select ng-model="category.properties" ng-options="property.name as property.displayName for property in properties" multiple ng-show="isCreate"></select>
+    <button ng-click="save()">save</button>
 </form>

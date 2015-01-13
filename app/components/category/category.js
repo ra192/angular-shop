@@ -43,19 +43,17 @@ function CategoryService(categoriesArray) {
 
 angular.module('myApp.category', ['myApp.settings'])
 
-    .factory('categoryService', ['$http', 'settings', function ($http,settings) {
+    .factory('categoryService', ['$http', 'settings', function ($http, settings) {
 
         var categoryService = new CategoryService([]);
 
         categoryService.init = function (callback) {
-            if (categoryService.categoriesArray.length == 0) {
-                $http.get(settings.apiUrl+'/categories.json').success(function (data) {
-                    categoryService.categoriesArray = data.data;
-                    callback();
-                });
-            }
-            else
+
+            $http.get(settings.apiUrl + '/categories.json').success(function (data) {
+                categoryService.categoriesArray = data.data;
                 callback();
+            });
+
         };
 
         return categoryService;

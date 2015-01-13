@@ -2,6 +2,7 @@
     <span ng-click="toggleCategory(category.name)" ng-class="{expanded:category.expanded}"
           ng-if="category.children.length>0">
         {{category.displayName}} <button ng-click="createCategory(category.name)">cr. sub</button>
+        <button ng-click="updateCategory(category.name)">upd. sub</button>
     </span>
     <ul ng-if="category.children.length>0" ng-show="category.expanded">
         <li ng-repeat="category in category.children" ng-include="'categories_renderer.html'">
@@ -20,6 +21,8 @@
 
     </li>
 </ul>
+
+<button ng-click="createCategory(null)">cr. root</button>
 
 <div id="products">
     <div ng-repeat="product in products">
