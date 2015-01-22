@@ -23,10 +23,11 @@
 </ul>
 
 <button ng-click="createCategory(null)">cr. root</button>
-
+<button ng-click="createProduct()">cr. product</button>
 <div id="products">
     <div ng-repeat="product in products">
         {{product.displayName}}
         {{product.price}}
+        <button ng-click="updateProduct(product.code)">upd. product</button>
     </div>
 </div>
