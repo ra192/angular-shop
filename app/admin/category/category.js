@@ -18,12 +18,12 @@ angular.module('myAdminApp.category', ['ngRoute', 'myApp.settings', 'myApp.user'
             if (user.isLoggedIn) {
                 $scope.category = {parent: $routeParams.parent};
 
-                $http.get(settings.apiUrl + '/properties.json').success(function (result) {
+                $http.get(settings.apiUrl + '/properties').success(function (result) {
                     $scope.properties = result.data;
                 });
 
                 $scope.save = function () {
-                    $http.post(settings.apiUrl + '/categories/create.json', $scope.category).success(function (result) {
+                    $http.post(settings.apiUrl + '/categories', $scope.category).success(function (result) {
                         $scope.message = result;
                     });
                 };
@@ -37,11 +37,11 @@ angular.module('myAdminApp.category', ['ngRoute', 'myApp.settings', 'myApp.user'
         User.getLoginStatus(function (user) {
             if (user.isLoggedIn) {
                 var name=$routeParams.name;
-                $http.get(settings.apiUrl+'/categories/get/'+name+'.json').success(function(result){
+                $http.get(settings.apiUrl+'/categories/'+name).success(function(result){
                     $scope.category = {name: name,displayName:result.displayName};
 
                     $scope.save = function () {
-                        $http.post(settings.apiUrl + '/categories/update.json', $scope.category).success(function (result) {
+                        $http.put(settings.apiUrl + '/categories', $scope.category).success(function (result) {
                             $scope.message = result;
                         });
                     };
