@@ -1,0 +1,12 @@
+{{message}}
+<form novalidate>
+    <input type="text" required ng-model="product.code" ng-show="isCreate"/>
+    <input type="text" required ng-model="product.displayName" />
+    <input type="number" required ng-model="product.price" />
+    <input type="url" required ng-model="product.imageUrl" />
+    <input type="text" required ng-model="product.description" />
+    <div ng-repeat="property in properties">
+        <select ng-model="product.propertyValues[$index]" ng-options="propertyValue.name as propertyValue.displayName for propertyValue in property.propertyValues"></select>
+    </div>
+    <button ng-click="save()">save</button>
+</form>

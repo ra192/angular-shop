@@ -1,0 +1,11 @@
+{{message}}
+<form novalidate>
+    <input type="text" required="true" ng-model="property.name" ng-show="isCreate"/>
+    <input type="text" required="true" ng-model="property.displayName"/>
+    <div ng-repeat="propertyValue in property.propertyValues" ng-show="isCreate">
+        <input type="text" ng-model="propertyValue.name"/>
+        <input type="text" ng-model="propertyValue.displayName"/>
+    </div>
+    <button ng-click="addPropertyValue()">add</button>
+    <button ng-click="save()">save</button>
+</form>

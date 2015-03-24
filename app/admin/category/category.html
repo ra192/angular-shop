@@ -1,8 +1,7 @@
-{{result}}
-<form name="form">
-    <input type="text" ng-model="category.name" required/>
-    <input type="text" ng-model="category.displayName" required/>
-    <select ng-model="category.properties" ng-options="property.name as property.displayName for property in properties" multiple required>
-    </select>
-    <button ng-click="save(category)" ng-disabled="form.$invalid">save</button>
+{{message}}
+<form novalidate>
+    <input type="text" required="true" ng-model="category.name" ng-show="isCreate"/>
+    <input type="text" required="true" ng-model="category.displayName"/>
+    <select ng-model="category.properties" ng-options="property.name as property.displayName for property in properties" multiple ng-show="isCreate"></select>
+    <button ng-click="save()">save</button>
 </form>
