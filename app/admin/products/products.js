@@ -29,7 +29,7 @@ angular.module('myAdminApp.products', ['ngRoute', 'myApp.category', 'myApp.setti
                     $scope.showProducts = function (categoryName) {
                         categoryService.selectCategory(categoryName);
 
-                        $http.post(settings.apiUrl + '/products/' + categoryName + '.json', {}).success(function (data) {
+                        $http.get(settings.apiUrl + '/categories' + categoryName + '/products').success(function (data) {
                             $scope.products = data.data;
                         });
 
@@ -60,17 +60,17 @@ angular.module('myAdminApp.products', ['ngRoute', 'myApp.category', 'myApp.setti
                 $scope.isCreate=true;
                 $scope.product = {category: $routeParams.category,propertyValues:[]};
 
-                $http.get(settings.apiUrl + '/categories/get/' + $routeParams.category + '.json').success(function (category) {
+                $http.get(settings.apiUrl + '/categories/' + $routeParams.category).success(function (category) {
                     $scope.properties = [];
                     for (var i = 0; i < category.properties.length; i++) {
-                        $http.get(settings.apiUrl + '/properties/get/' + category.properties[i] + '.json').success(function (property) {
+                        $http.get(settings.apiUrl + '/properties/' + category.properties[i]).success(function (property) {
                             $scope.properties.push(property);
                         });
                     }
                 });
 
                 $scope.save = function () {
-                    $http.post(settings.apiUrl + '/product/create.json', $scope.product).success(function (result) {
+                    $http.post(settings.apiUrl + '/products', $scope.product).success(function (result) {
                         $scope.message = result;
                     });
                 };
@@ -80,13 +80,13 @@ angular.module('myAdminApp.products', ['ngRoute', 'myApp.category', 'myApp.setti
     .controller('UpdateProductCtrl', ['$scope', '$routeParams', '$http', 'settings', 'User', function ($scope, $routeParams, $http, settings, User) {
         User.getLoginStatus(function (user) {
             if (user.isLoggedIn) {
-                $http.get(settings.apiUrl+'/product/'+$routeParams.code+'.json').success(function(product){
+                $http.get(settings.apiUrl+'/products/'+$routeParams.code).success(function(product){
                     $scope.product=product;
 
-                    $http.get(settings.apiUrl + '/categories/get/' + product.category + '.json').success(function (category) {
+                    $http.get(settings.apiUrl + '/categories/' + product.category).success(function (category) {
                         $scope.properties = [];
                         for (var i = 0; i < category.properties.length; i++) {
-                            $http.get(settings.apiUrl + '/properties/get/' + category.properties[i] + '.json').success(function (property) {
+                            $http.get(settings.apiUrl + '/properties/' + category.properties[i]).success(function (property) {
                                 for(var i=0;i<property.propertyValues.length;i++) {
                                     var ind=product.propertyValues.indexOf(property.propertyValues[i].name);
                                     if(ind>-1) {
@@ -100,7 +100,7 @@ angular.module('myAdminApp.products', ['ngRoute', 'myApp.category', 'myApp.setti
                 });
 
                 $scope.save = function () {
-                    $http.post(settings.apiUrl + '/product/update.json', $scope.product).success(function (result) {
+                    $http.put(settings.apiUrl + '/products', $scope.product).success(function (result) {
                         $scope.message = result;
                     });
                 };
