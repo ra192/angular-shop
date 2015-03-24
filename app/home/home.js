@@ -76,18 +76,20 @@ angular.module('myApp.home', ['ngRoute', 'myApp.settings', 'myApp.category', 'my
             if (typeof isAsc == 'undefined') isAsc = true;
             $scope.isAsc = isAsc;
 
-            $http.post(settings.apiUrl + '/products/' + selectedCategoryName + '.json', {
-                "propertyValues": propertyValues,
-                "first": (currentPage - 1) * settings.productsPerPage,
-                "max": settings.productsPerPage,
-                "orderProperty": order,
-                "isAsc": isAsc
+            $http.get(settings.apiUrl + '/categories/'+selectedCategoryName+'/products', {
+                params:{
+                    "propertyValues": propertyValues,
+                    "first": (currentPage - 1) * settings.productsPerPage,
+                    "max": settings.productsPerPage,
+                    "orderProperty": order,
+                    "isAsc": isAsc
+                }
             }).success(function (data) {
                 $scope.products = data.data;
                 $scope.pages = getPages(currentPage, getLastPage(data.count, settings.productsPerPage), 1);
             });
 
-            $http.post(settings.apiUrl + '/productsProperties/' + selectedCategoryName + '.json', {"propertyValues": propertyValues}).success(function (data) {
+            $http.get(settings.apiUrl + '/categories/' + selectedCategoryName + '/products/properties', {params:{"propertyValues": propertyValues}}).success(function (data) {
                 $scope.selectedProperties = data.selectedProperties.reduce(function (a, b) {
                     return a.concat(b.propertyValues);
                 }, []);

@@ -1,5 +1,36 @@
-<ul>
-    <li ng-repeat="category in categories">
-        {{category.displayName}}
-    </li>
-</ul>
+<script type="text/ng-template" id="categories_renderer.html">
+    <span ng-click="toggleCategory(category.name)" ng-class="{expanded:category.expanded}"
+          ng-if="category.children.length>0">
+        {{category.displayName}} <button ng-click="createCategory(category.name)">createSub</button>
+    </span>
+    <ul ng-if="category.children.length>0" ng-show="category.expanded">
+        <li ng-repeat="category in category.children" ng-include="'categories_renderer.html'">
+        </li>
+    </ul>
+
+    <span ng-click="showProducts(category.name)" ng-class="{selected:category.selected}"
+          ng-if="category.children.length==0">
+        {{category.displayName}} <button ng-click="createCategory(category.name)">createSub</button>
+    </span>
+
+</script>
+<button ng-click="createCategory(null)">createRoot</button>
+<div id="categories">
+    <ul>
+        <li ng-repeat="category in categories" ng-include="'categories_renderer.html'">
+
+        </li>
+    </ul>
+</div>
+
+<div id="products">
+    Sort by:
+    <span ng-click="order('displayName',true)" ng-class="{selected: selectedOrder=='displayName'&& isAsc}">display name asc</span>
+    <span ng-click="order('displayName',false)" ng-class="{selected: selectedOrder=='displayName'&& !isAsc}">display name desc</span>
+    <span ng-click="order('price',true)"ng-class="{selected: selectedOrder=='price'&& isAsc}">price asc</span>
+    <span ng-click="order('price',false)" ng-class="{selected: selectedOrder=='price'&& !isAsc}">price desc</span>
+    <div ng-repeat="product in products">
+        {{product.displayName}}
+        {{product.price}}
+    </div>
+</div>

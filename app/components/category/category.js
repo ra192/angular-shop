@@ -49,7 +49,7 @@ angular.module('myApp.category', ['myApp.settings'])
 
         categoryService.init = function (callback) {
             if (categoryService.categoriesArray.length == 0) {
-                $http.get(settings.apiUrl+'/categories.json').success(function (data) {
+                $http.get(settings.apiUrl+'/categories').success(function (data) {
                     categoryService.categoriesArray = data.data;
                     callback();
                 });
