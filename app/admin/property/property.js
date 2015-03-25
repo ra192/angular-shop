@@ -18,7 +18,7 @@ angular.module('myAdminApp.property', ['ngRoute', 'myApp.settings', 'myApp.user'
             if (user.isLoggedIn) {
                 $scope.property={propertyValues:[{},{}]};
                 $scope.save = function () {
-                    $http.post(settings.apiUrl + '/properties/create.json', $scope.property).success(function (result) {
+                    $http.post(settings.apiUrl + '/properties', $scope.property).success(function (result) {
                         $scope.message = result;
                     });
                 };
@@ -33,11 +33,11 @@ angular.module('myAdminApp.property', ['ngRoute', 'myApp.settings', 'myApp.user'
         User.getLoginStatus(function (user) {
             if (user.isLoggedIn) {
                 var name=$routeParams.name;
-                $http.get(settings.apiUrl+'/properties/get/'+name+'.json').success(function(result){
+                $http.get(settings.apiUrl+'/properties/'+name).success(function(result){
                     $scope.property = {name: name,displayName:result.displayName};
 
                     $scope.save = function () {
-                        $http.post(settings.apiUrl + '/properties/update.json', $scope.property).success(function (result) {
+                        $http.put(settings.apiUrl + '/properties', $scope.property).success(function (result) {
                             $scope.message = result;
                         });
                     };
